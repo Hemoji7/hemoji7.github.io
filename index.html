@@ -13,7 +13,7 @@
 
     /* Floating left navigation */
     .sidenav {
-      position: fixed; top: 20px; left: 20px; z-index: 20;
+      position: fixed; top: var(--nav-top, 20px); left: 20px; z-index: 20;
       background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px 10px;
       box-shadow: 0 10px 30px rgba(0,0,0,.35); display: flex; flex-direction: column; gap: 4px; min-width: 150px;
     }
@@ -26,7 +26,7 @@
 
     /* Floating video (top right, follows the page while scrolling) */
     .floating-video {
-      position: fixed; top: 20px; right: 20px; width: 280px; z-index: 30;
+      position: fixed; top: var(--nav-top, 20px); right: 20px; width: 280px; z-index: 30;
       background: #000; border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
       box-shadow: 0 14px 36px rgba(0,0,0,.45);
     }
@@ -152,6 +152,17 @@
       }
     }
     loadRepos();
+
+    // Line the floating nav and video up with the top of the About section
+    function alignFloatingTop() {
+      const about = document.getElementById("about");
+      if (!about) return;
+      const top = about.getBoundingClientRect().top + window.scrollY;
+      document.documentElement.style.setProperty("--nav-top", Math.max(0, top) + "px");
+    }
+    alignFloatingTop();
+    window.addEventListener("resize", alignFloatingTop);
+    window.addEventListener("load", alignFloatingTop);
 
     // Highlight the side nav link for the section in view
     const links = document.querySelectorAll(".sidenav a[data-spy]");
