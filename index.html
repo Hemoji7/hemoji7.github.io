@@ -7,54 +7,158 @@
   <style>
     :root { --bg:#0e1420; --panel:#162033; --text:#e8edf7; --muted:#9aa7bf; --accent:#6ea8ff; --border:#27365a; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
-    .wrap { max-width: 720px; margin: 0 auto; padding: 72px 20px; }
+    a { color: var(--accent); }
+
+    /* Floating left navigation */
+    .sidenav {
+      position: fixed; top: 50%; left: 20px; transform: translateY(-50%); z-index: 20;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35); display: flex; flex-direction: column; gap: 4px; min-width: 150px;
+    }
+    .sidenav .label { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; padding: 4px 10px 8px; }
+    .sidenav a {
+      color: var(--muted); text-decoration: none; padding: 8px 12px; border-radius: 9px; font-size: .95rem; transition: background .2s, color .2s;
+    }
+    .sidenav a:hover { color: var(--text); background: #1d2a43; }
+    .sidenav a.active { color: var(--text); background: #1d2a43; box-shadow: inset 3px 0 0 var(--accent); }
+
+    /* Floating video (top right, follows the page while scrolling) */
+    .floating-video {
+      position: fixed; top: 20px; right: 20px; width: 280px; z-index: 30;
+      background: #000; border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+      box-shadow: 0 14px 36px rgba(0,0,0,.45);
+    }
+    .floating-video video { width: 100%; display: block; }
+
+    /* Main content */
+    main { margin-left: 210px; margin-right: 330px; padding: 72px 20px; max-width: 760px; }
     h1 { font-size: 2.2rem; }
     .headline { color: var(--muted); margin-top: 6px; }
+    section { scroll-margin-top: 40px; }
     .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-top: 28px; }
     .card h2 { font-size: 1rem; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
-    .links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
-    .links a { color: var(--text); border: 1px solid var(--border); background: var(--panel); padding: 10px 16px; border-radius: 10px; text-decoration: none; font-weight: 600; }
-    .links a:hover { border-color: var(--accent); }
+    .oneliner { font-size: 1.1rem; font-style: normal; }
+    .repo-list { list-style: none; display: grid; gap: 10px; margin-top: 12px; }
+    .repo-list li { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; background: #1d2a43; }
+    .repo-list a { font-weight: 600; text-decoration: none; color: var(--text); }
+    .repo-list a:hover { color: var(--accent); }
+    .repo-list .desc { color: var(--muted); font-size: .9rem; margin-top: 2px; }
+    .repo-list .meta { color: var(--muted); font-size: .8rem; margin-top: 4px; }
+    .contact-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .contact-links a { color: var(--text); border: 1px solid var(--border); background: var(--panel); padding: 10px 16px; border-radius: 10px; text-decoration: none; font-weight: 600; }
+    .contact-links a:hover { border-color: var(--accent); }
     footer { color: var(--muted); font-size: .85rem; margin-top: 40px; }
     .thinking { color: var(--muted); font-style: italic; margin-top: 10px; }
     .thinking::after { content: ""; animation: dots 1.4s steps(4, end) infinite; }
     @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+
+    /* Smaller screens: hide the side nav, move the video to the corner */
+    @media (max-width: 1100px) {
+      .sidenav { display: none; }
+      main { margin-left: auto; margin-right: auto; margin-top: 0; }
+      .floating-video { width: 220px; top: auto; bottom: 16px; right: 16px; }
+    }
+    @media (max-width: 640px) {
+      .floating-video { display: none; }
+    }
   </style>
 </head>
 <body>
-  <main class="wrap">
+
+  <nav class="sidenav" aria-label="Page sections">
+    <div class="label">On this page</div>
+    <a href="#about" data-spy="about">About</a>
+    <a href="#projects" data-spy="projects">Projects</a>
+    <a href="#contact" data-spy="contact">Contact</a>
+  </nav>
+
+  <div class="floating-video">
+    <video autoplay muted loop playsinline controls preload="auto">
+      <source src="media/work-in-progress.mp4" type="video/mp4">
+      Your browser can't play this video.
+    </video>
+  </div>
+
+  <main>
     <h1>Hemoji Rao G</h1>
     <p class="headline">Add your headline here</p>
 
-    <section class="card">
-      <h2>Work in progress</h2>
-      <p>Work in progress…</p>
-      <p class="thinking">Thinking...</p>
-      <video autoplay muted loop playsinline controls preload="auto" style="width:100%; border-radius:10px; margin-top:14px; background:#000;">
-        <source src="media/work-in-progress.mp4" type="video/mp4">
-        Your browser can't play this video.
-      </video>
-    </section>
-
-    <section class="card">
+    <section class="card" id="about">
       <h2>About</h2>
-      <p>A short summary of who you are and what you work on. Replace this text with your own.</p>
+      <p class="oneliner">I speak fluent Git, dabble in robotics, and have never once read the manual first.</p>
+      <p style="margin-top:10px">A short summary of who you are and what you work on. Replace this text with your own.</p>
       <p class="thinking">Thinking...</p>
     </section>
 
-    <section class="card">
+    <section class="card" id="projects">
       <h2>Projects</h2>
-      <p>Browse my open-source work on <a href="https://github.com/hemoji7" style="color:var(--accent)">GitHub</a>.</p>
+      <p>Public repositories from <a href="https://github.com/hemoji7" target="_blank" rel="noopener">GitHub</a>, loaded live.</p>
+      <ul class="repo-list" id="repoList"></ul>
       <p class="thinking">Thinking...</p>
     </section>
 
-    <nav class="links">
-      <a href="https://github.com/hemoji7" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/hemoji-rao-g-6159458" target="_blank" rel="noopener">LinkedIn</a>
-    </nav>
+    <section class="card" id="contact">
+      <h2>Contact</h2>
+      <p>Say hello on either of these.</p>
+      <div class="contact-links">
+        <a href="https://github.com/hemoji7" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/hemoji-rao-g-6159458" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <p class="thinking">Thinking...</p>
+    </section>
 
     <footer>© Hemoji Rao G</footer>
   </main>
+
+  <script>
+    // Repos fetched live from GitHub. The fallback list is used if the request fails.
+    const GITHUB_USER = "hemoji7";
+    const FALLBACK_REPOS = [
+      { name: "hemoji7.github.io", html_url: "https://github.com/hemoji7/hemoji7.github.io", description: "Home page for this site", language: "HTML" },
+      { name: "robotics-simulators", html_url: "https://github.com/hemoji7/robotics-simulators", description: "Robotics simulation projects", language: null },
+      { name: "AI-Transformation-Playbook", html_url: "https://github.com/hemoji7/AI-Transformation-Playbook", description: "AI transformation playbook", language: null },
+      { name: "material-design-lite", html_url: "https://github.com/hemoji7/material-design-lite", description: "Fork of Material Design Lite", language: "JavaScript", fork: true }
+    ];
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+    function renderRepos(repos) {
+      document.getElementById("repoList").innerHTML = repos.map(r => `
+        <li>
+          <a href="${esc(r.html_url)}" target="_blank" rel="noopener">${esc(r.name)}</a>
+          <div class="desc">${esc(r.description || "No description yet.")}</div>
+          <div class="meta">${r.language ? esc(r.language) + " · " : ""}${r.fork ? "Fork" : "Original"}</div>
+        </li>`).join("");
+    }
+
+    async function loadRepos() {
+      try {
+        const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?type=owner&sort=updated&per_page=100`);
+        if (!res.ok) throw new Error(res.status);
+        const data = await res.json();
+        const publicRepos = data.filter(r => !r.private);
+        renderRepos(publicRepos.map(r => ({
+          name: r.name, html_url: r.html_url, description: r.description,
+          language: r.language, fork: r.fork
+        })));
+      } catch (err) {
+        renderRepos(FALLBACK_REPOS);
+      }
+    }
+    loadRepos();
+
+    // Highlight the side nav link for the section in view
+    const links = document.querySelectorAll(".sidenav a[data-spy]");
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          links.forEach(a => a.classList.toggle("active", a.dataset.spy === en.target.id));
+        }
+      });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    document.querySelectorAll("main section[id]").forEach(s => spy.observe(s));
+  </script>
 </body>
 </html>
