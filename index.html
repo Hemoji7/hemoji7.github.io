@@ -122,10 +122,16 @@
 
     const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
+    // Each repo's GitHub Pages site (its index.html). The user site lives at the root URL.
+    function pagesUrl(name) {
+      if (name.toLowerCase() === `${GITHUB_USER}.github.io`) return `https://${GITHUB_USER}.github.io/`;
+      return `https://${GITHUB_USER}.github.io/${encodeURIComponent(name)}/`;
+    }
+
     function renderRepos(repos) {
       document.getElementById("repoList").innerHTML = repos.map(r => `
         <li>
-          <a href="${esc(r.html_url)}" target="_blank" rel="noopener">${esc(r.name)}</a>
+          <a href="${esc(pagesUrl(r.name))}" target="_blank" rel="noopener">${esc(r.name)}</a>
           <div class="desc">${esc(r.description || "No description yet.")}</div>
           <div class="meta">${r.language ? esc(r.language) + " · " : ""}${r.fork ? "Fork" : "Original"}</div>
         </li>`).join("");
